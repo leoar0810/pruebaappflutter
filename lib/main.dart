@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'controllers/CreditSimulationController.dart';
 import 'views/onboarding.dart';
 import 'views/login.dart';
 import 'views/signup.dart';
@@ -40,10 +41,10 @@ class MyApp extends StatelessWidget {
       ),
       home: SignInSignUpView(
         onSignInPressed: () {
-          Get.to(LogInScreen());
+          Get.to(LoginPage());
         },
         onSignUpPressed: () {
-          Get.to(SignUpScreen());
+          Get.to(SignUpPage());
         },
       ),
     );

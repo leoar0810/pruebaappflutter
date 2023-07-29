@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'creditoSimulation.dart';
 
 class RegistrationSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Registro Exitoso')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -29,7 +30,7 @@ class RegistrationSuccessPage extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // TODO: Implementar el código para navegar a la siguiente pantalla de la app.
+                Get.to(CreditSimulationPage());
               },
               child: Text('Continuar'),
             ),
