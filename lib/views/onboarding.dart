@@ -24,8 +24,8 @@ class SignInSignUpView extends StatelessWidget {
               aspectRatio: MediaQuery.of(context).size.aspectRatio,
             ),
             items: [
-              'https://images.unsplash.com/photo-1626594995085-36b551227b9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmF0dXJlJTIwdmVydGljYWx8ZW58MHx8MHx8fDA%3D&w=1000&q=80', // URL of the first image
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVdyWzsYoD5Mj_qRAI4SCQOaYDxvlK_ltJ9g&usqp=CAU', // URL of the second image
+              'https://wallpapercave.com/wp/wp5970199.jpg', // URL of the first image
+              'https://images.unsplash.com/photo-1495314736024-fa5e4b37b979?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&w=1000&q=80', // URL of the second image
             ].map((item) => Image.network(item, fit: BoxFit.cover)).toList(),
           ),
           Positioned(

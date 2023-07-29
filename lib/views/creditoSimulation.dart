@@ -86,7 +86,7 @@ class CreditSimulationPage extends StatelessWidget {
                     _controller.baseSalary.value = 10;
                   } else {
                     _loanController.text =
-                        (double.tryParse(value)! * 7 / 0.15).toString();
+                        (double.tryParse(value)! * 7 / 0.15).toStringAsFixed(2);
                     _controller.loanAmount.value =
                         (double.tryParse(value)! * 7 / 0.15);
                   }
@@ -112,8 +112,27 @@ class CreditSimulationPage extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  _controller.calculateAmortizationTable();
-                  Get.to(() => AmortizationTablePage());
+                  // Home button onPressed
+                  if (_controller.loanMonths.value >= 12 &&
+                      _controller.loanMonths.value <= 84) {
+                    _controller.calculateAmortizationTable();
+                    Get.to(AmortizationTablePage());
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Error'),
+                        content: Text(
+                            'El número de meses debe estár en el rango de 12 a 84'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blue, // Set the button color to blue

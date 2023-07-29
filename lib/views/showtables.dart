@@ -52,18 +52,20 @@ class SavedTablesPage extends StatelessWidget {
                 // Assuming you have properties 'meses' and 'saldoInicial' in your document.
                 final meses = tableData['meses'];
                 final saldoInicial = tableData['saldoInicial'];
-
+                final interes = tableData['interes'];
                 return Card(
                   child: DataTable(
                     columns: [
-                      DataColumn(label: Text('Meses')),
-                      DataColumn(label: Text('Saldo Inicial')),
+                      DataColumn(label: Text('Monto del crédito')),
+                      DataColumn(label: Text('Cuotas')),
+                      DataColumn(label: Text('Interés')),
                     ],
                     rows: [
                       DataRow(
                         cells: [
+                          DataCell(Text(saldoInicial.toStringAsFixed(2))),
                           DataCell(Text(meses.toString())),
-                          DataCell(Text(saldoInicial.toString())),
+                          DataCell(Text(interes.toString())),
                         ],
                       ),
                     ],

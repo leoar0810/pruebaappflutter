@@ -73,7 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
           context: context,
           builder: (context) => AlertDialog(
             title: Text('Error'),
-            content: Text('Please accept the terms and conditions.'),
+            content: Text('Por favor acepta los términos y condiciones.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -122,7 +122,9 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: SafeArea(
+          child: SingleChildScrollView(
+              child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +230,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ],
         ),
-      ),
+      ))),
     );
   }
 }

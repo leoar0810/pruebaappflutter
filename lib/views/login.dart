@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (context) => AlertDialog(
             title: Text('Error'),
-            content: Text('Please enter both email and password.'),
+            content: Text('Debes ingresasr email y contraseña.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Error'),
-          content: Text('Invalid email or password.'),
+          content: Text('Email o contraseñas inválidos.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),

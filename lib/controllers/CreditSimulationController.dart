@@ -8,6 +8,7 @@ class CreditSimulationController extends GetxController {
   final RxDouble baseSalary = 0.0.obs;
   final RxDouble loanAmount = 0.0.obs;
   final RxInt loanMonths = 12.obs;
+  final RxDouble rate = 0.0.obs;
   RxList<AmortizationEntry> amortizationTable = <AmortizationEntry>[].obs;
 
   void calculateAmortizationTable() {
@@ -21,6 +22,7 @@ class CreditSimulationController extends GetxController {
     if (selectedCreditType == 'Crédito de Libre Inversión') {
       monthlyInterestRate = 0.035;
     }
+    rate.value = monthlyInterestRate;
     // 1.5% de interés mensual
     double monthlyPayment = loanAmount.value *
         (monthlyInterestRate /

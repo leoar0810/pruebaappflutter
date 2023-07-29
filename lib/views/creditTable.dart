@@ -42,7 +42,7 @@ class AmortizationTablePage extends StatelessWidget {
         'Cuota': 'Cuota ${entry.monthNumber}',
         'Saldo Inicial': entry.initialBalance.toStringAsFixed(2),
         'Valor de Cuota': entry.monthlyPayment.toStringAsFixed(2),
-        'Interés': entry.interest.toStringAsFixed(2),
+        'Interés': entry.interest.toStringAsFixed(4),
         'Abono al Capital': entry.principalPayment.toStringAsFixed(2),
         'Saldo del Período': entry.finalBalance.toStringAsFixed(2),
       };
@@ -53,6 +53,7 @@ class AmortizationTablePage extends StatelessWidget {
       'tableData': tableData,
       'saldoInicial': _controller.loanAmount.value,
       'meses': _controller.loanMonths.value,
+      'interes': _controller.rate.value,
       'timestamp':
           FieldValue.serverTimestamp(), // Optionally store the timestamp
     });
@@ -109,7 +110,7 @@ class AmortizationTablePage extends StatelessWidget {
         entry.monthNumber,
         entry.initialBalance.toStringAsFixed(2),
         entry.monthlyPayment.toStringAsFixed(2),
-        entry.interest.toStringAsFixed(2),
+        entry.interest.toStringAsFixed(4),
         entry.principalPayment.toStringAsFixed(2),
         entry.finalBalance.toStringAsFixed(2),
       ]);
@@ -127,7 +128,7 @@ class AmortizationTablePage extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Text('Exportación Completada'),
         content: Text(
-            'La tabla de amortización se ha exportado al directorio de Documentos correctamente.'),
+            'La tabla de amortización se ha exportado al directorio de Descargas correctamente.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -173,7 +174,7 @@ class AmortizationTablePage extends StatelessWidget {
                               DataCell(Text(
                                   '\$${entry.monthlyPayment.toStringAsFixed(2)}')),
                               DataCell(Text(
-                                  '\$${entry.interest.toStringAsFixed(2)}')),
+                                  '\$${entry.interest.toStringAsFixed(3)}')),
                               DataCell(Text(
                                 '+\$${entry.principalPayment.toStringAsFixed(2)}',
                                 style: TextStyle(
