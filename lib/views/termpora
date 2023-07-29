@@ -1,101 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SignUpScreen extends StatefulWidget {
+class ShowTablesPage extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _ShowTablesPageState createState() => _ShowTablesPageState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _idNumberController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  bool _termsAccepted = false;
+class _ShowTablesPageState extends State<ShowTablesPage> {
+  // Lista para almacenar las tablas recuperadas de Firestore
+  List<Map<String, dynamic>> _tables = [];
 
-  void _signupWithEmailAndPassword() async {
-    if (_termsAccepted) {
-      try {
-        final FirebaseAuth _auth = FirebaseAuth.instance;
-        final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-        // TODO: Save additional user information (name and ID number) to the database.
-        // TODO: Navigate to the home screen after successful signup.
-      } catch (e) {
-        // Handle signup errors here.
-        print('Error during signup: $e');
-      }
-    } else {
-      // Show a dialog or snackbar indicating that the terms and conditions must be accepted.
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Terms and Conditions'),
-          content: Text('Please accept the terms and conditions to sign up.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
+  @override
+  void initState() {
+    super.initState();
+    // Llama a la función para recuperar las tablas del usuario al cargar la página
+    _getTablesFromFirestore();
+  }
+
+  // Función para recuperar las tablas del usuario desde Firestore
+  Future<void> _getTablesFromFirestore() async {
+    // Asegúrate de haber inicializado Firebase antes de usar Firestore
+    // (Por ejemplo, en el método 'main' de main.dart)
+
+    // Obtén una instancia de FirebaseAuth si es necesario
+    // final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    // Obtén el usuario actualmente autenticado si es necesario
+    // User? user = _auth.currentUser;
+
+    // Verifica si el usuario está autenticado y obtén el UID si es así
+    // String userId = '';
+    // if (user != null) {
+    //   userId = user.uid;
+    // } else {
+    //   print('Usuario no autenticado.');
+    //   return;
+    // }
+
+    // Crea una referencia a la colección "users" y el documento usando el ID del usuario
+    // CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+    // DocumentReference userDocument = usersCollection.doc(userId);
+
+    try {
+      // Obtén los datos de Firestore
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
+
+      // Limpia la lista antes de agregar las nuevas tablas
+      _tables.clear();
+
+      // Recorre cada documento en la colección y agrega la tabla a la lista
+      querySnapshot.docs.forEach((documentSnapshot) {
+        Map<String, dynamic> tableData = documentSnapshot.data()['cotizaciones'];
+        _tables.add(tableData);
+      });
+
+      // Notifica al widget que los datos han cambiado y se debe reconstruir
+      setState(() {});
+    } catch (e) {
+      print('Error al obtener las tablas: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign Up')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            SizedBox(height: 12),
-            TextField(
-              controller: _idNumberController,
-              decoration: InputDecoration(labelText: 'Identification Number'),
-            ),
-            SizedBox(height: 12),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            SizedBox(height: 12),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Checkbox(
-                  value: _termsAccepted,
-                  onChanged: (value) {
-                    setState(() {
-                      _termsAccepted = value!;
-                    });
-                  },
-                ),
-                Text('I accept the terms and conditions.'),
-              ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _signupWithEmailAndPassword,
-              child: Text('Sign Up'),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text('Lista de Tablas'),
       ),
+      body: _tables.isEmpty
+          ? Center(
+              child: Text('No se encontraron tablas.'),
+            )
+          : ListView.builder(
+              itemCount: _tables.length,
+              itemBuilder: (context, index) {
+                // Obtiene los datos de la tabla actual
+                Map<String, dynamic> tableData = _tables[index];
+                // Formatea los datos para mostrarlos en un texto
+                String tableText =
+                    'Cuota: ${tableData['Cuota']}\n'
+                    'Saldo Inicial: ${tableData['Saldo Inicial']}\n'
+                    'Valor de Cuota: ${tableData['Valor de Cuota']}\n'
+                    'Interés: ${tableData['Interés']}\n'
+                    'Abono al Capital: ${tableData['Abono al Capital']}\n'
+                    'Saldo del Período: ${tableData['Saldo del Período']}';
+
+                // Retorna un widget para mostrar la tabla
+                return Card(
+                  margin: EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text('Tabla ${index + 1}'),
+                    subtitle: Text(tableText),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
