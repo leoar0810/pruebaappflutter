@@ -48,13 +48,27 @@ class SavedTablesPage extends StatelessWidget {
               itemCount: tables.length,
               itemBuilder: (context, index) {
                 final tableData = tables[index].data() as Map<String, dynamic>;
-                // Aquí puedes mostrar los datos de la tabla, como su nombre o información relevante.
-                // Por ejemplo, si tienes una propiedad 'name' en tu documento de tabla:
-                // final tableName = tableData['name'];
-                return ListTile(
-                    // title: Text(tableName),
-                    // Mostrar otros datos relevantes de la tabla aquí.
-                    );
+
+                // Assuming you have properties 'meses' and 'saldoInicial' in your document.
+                final meses = tableData['meses'];
+                final saldoInicial = tableData['saldoInicial'];
+
+                return Card(
+                  child: DataTable(
+                    columns: [
+                      DataColumn(label: Text('Meses')),
+                      DataColumn(label: Text('Saldo Inicial')),
+                    ],
+                    rows: [
+                      DataRow(
+                        cells: [
+                          DataCell(Text(meses.toString())),
+                          DataCell(Text(saldoInicial.toString())),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
               },
             );
           }

@@ -48,8 +48,14 @@ class AmortizationTablePage extends StatelessWidget {
       };
     }).toList();
 
-    // Guarda la tabla en Firestore
-    await userDocument.set({'cotizaciones': tableData});
+    // Save the table in Firestore
+    await userDocument.collection('cotizaciones').add({
+      'tableData': tableData,
+      'saldoInicial': _controller.loanAmount.value,
+      'meses': _controller.loanMonths.value,
+      'timestamp':
+          FieldValue.serverTimestamp(), // Optionally store the timestamp
+    });
 
     showDialog(
       context: context,
@@ -213,7 +219,34 @@ class AmortizationTablePage extends StatelessWidget {
             SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
-                _saveTableToFirestore(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Row(
+                      children: [
+                        Icon(Icons.save), // Icono de disco para el diálogo
+                        SizedBox(width: 8),
+                        Text('Guardar cotización'),
+                      ],
+                    ),
+                    content: Text(
+                      '¿Estás seguro de que deseas guardar la cotización en Firestore?',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('Cancelar'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _saveTableToFirestore(context);
+                          Navigator.pop(context);
+                        },
+                        child: Text('Guardar'),
+                      ),
+                    ],
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 primary: Colors.white, // Set the button color to blue
