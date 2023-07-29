@@ -169,7 +169,12 @@ class AmortizationTablePage extends StatelessWidget {
                               DataCell(Text(
                                   '\$${entry.interest.toStringAsFixed(2)}')),
                               DataCell(Text(
-                                  '\$${entry.principalPayment.toStringAsFixed(2)}')),
+                                '+\$${entry.principalPayment.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  color: Colors
+                                      .green, // Establece el color verde en el texto
+                                ),
+                              )),
                               DataCell(Text(
                                   '\$${entry.finalBalance.toStringAsFixed(2)}')),
                             ],
@@ -180,39 +185,76 @@ class AmortizationTablePage extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
-                // Aquí puedes implementar la lógica para guardar la cotización en el historial de créditos
-                // Por ejemplo, guardar la lista de amortización en Firebase Firestore.
-
-                //sprint(_controller.amortizationTable[1].finalBalance);
                 _exportToCSV(context);
               },
-              child: Text('Guardar Cotización'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue, // Set the button color to blue
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8.0), // Add rounded corners
+                ),
+                padding: EdgeInsets.symmetric(
+                    vertical: 14.0), // Increase vertical padding
+                minimumSize: Size(double.infinity,
+                    48.0), // Make the button occupy all horizontal space
+              ),
+              child: Text(
+                'Descargar tabla',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
+            SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
-                // Llama a la función para guardar la tabla en Firestore
                 _saveTableToFirestore(context);
               },
-              child: Text('Guardar Cotización en Firestore'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white, // Set the button color to blue
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8.0), // Add rounded corners
+                ),
+                padding: EdgeInsets.symmetric(
+                    vertical: 14.0), // Increase vertical padding
+                minimumSize: Size(double.infinity,
+                    48.0), // Make the button occupy all horizontal space
+              ),
+              child: Text(
+                'Guardar cotización',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        shape: const CircularNotchedRectangle(),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
               icon: Icon(Icons.home),
               onPressed: () {
+                // Home button onPressed
                 Get.to(CreditSimulationPage());
               },
             ),
             IconButton(
               icon: Icon(Icons.history),
               onPressed: () {
+                // History button onPressed
                 Get.to(SavedTablesPage());
               },
             ),

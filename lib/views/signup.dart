@@ -20,6 +20,25 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _termsAccepted = false;
 
+  InputDecoration _createInputDecoration(String labelText, IconData icon) {
+    return InputDecoration(
+      labelText: labelText,
+      prefixIcon: Icon(icon), // Add the icon as the prefix icon
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+      ),
+    );
+  }
+
   Future<void> _signUpWithEmailAndPassword() async {
     try {
       final String name = _nameController.text.trim();
@@ -134,26 +153,29 @@ class _SignUpPageState extends State<SignUpPage> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12),
             ),
+            SizedBox(height: 20),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Nombre completo'),
+              decoration:
+                  _createInputDecoration('Nombre completo', Icons.person),
             ),
             SizedBox(height: 12),
             TextField(
               controller: _identificationController,
-              decoration: InputDecoration(labelText: 'Identificación'),
+              decoration:
+                  _createInputDecoration('Identificación', Icons.account_box),
             ),
             SizedBox(height: 12),
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: _createInputDecoration('Email', Icons.email),
             ),
             SizedBox(height: 12),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Contraseña'),
+              decoration: _createInputDecoration('Contraseña', Icons.lock),
             ),
             SizedBox(height: 12),
             Row(

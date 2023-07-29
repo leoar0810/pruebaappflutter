@@ -15,6 +15,25 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _rememberUser = false;
 
+  InputDecoration _createInputDecoration(String labelText, IconData icon) {
+    return InputDecoration(
+      labelText: labelText,
+      prefixIcon: Icon(icon), // Add the icon as the prefix icon
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+      ),
+    );
+  }
+
   Future<void> _loginWithEmailAndPassword() async {
     try {
       final String email = _emailController.text.trim();
@@ -111,13 +130,13 @@ class _LoginPageState extends State<LoginPage> {
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: _createInputDecoration('Email', Icons.email),
             ),
             SizedBox(height: 12),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Contraseña'),
+              decoration: _createInputDecoration('Contraseña', Icons.lock),
             ),
             SizedBox(height: 12),
             Row(
@@ -143,7 +162,25 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _loginWithEmailAndPassword,
-              child: Text('Iniciar Sesión'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue, // Set the button color to blue
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8.0), // Add rounded corners
+                ),
+                padding: EdgeInsets.symmetric(
+                    vertical: 16.0), // Increase vertical padding
+                minimumSize: Size(double.infinity,
+                    48.0), // Make the button occupy all horizontal space
+              ),
+              child: Text(
+                'Iniciar sesión',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
             SizedBox(height: 24),
             TextButton(

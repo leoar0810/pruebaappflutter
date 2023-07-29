@@ -10,93 +10,156 @@ class CreditSimulationPage extends StatelessWidget {
       Get.put(CreditSimulationController());
   final TextEditingController _loanController = TextEditingController();
 
+  InputDecoration _createInputDecoration(String labelText, IconData icon) {
+    return InputDecoration(
+      labelText: labelText,
+      prefixIcon: Icon(icon), // Add the icon as the prefix icon
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Simulación de Crédito')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            DropdownButtonFormField<String>(
-              value: _controller.selectedCreditType.value,
-              items: [
-                'Crédito Vehículo',
-                'Crédito Vivienda',
-                'Crédito de Libre Inversión'
-              ]
-                  .map((creditType) => DropdownMenuItem<String>(
-                      value: creditType, child: Text(creditType)))
-                  .toList(),
-              onChanged: (value) {
-                _controller.selectedCreditType.value = value ?? '';
-              },
-              decoration: InputDecoration(labelText: 'Tipo de Crédito'),
-            ),
-            SizedBox(height: 12),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _controller.baseSalary.value = double.tryParse(value) ?? 0.0;
-                if (value.isEmpty) {
-                  _loanController.text = '0';
-                  _controller.baseSalary.value = 10;
-                } else {
-                  _loanController.text =
-                      (double.tryParse(value)! * 7 / 0.15).toString();
-                  _controller.loanAmount.value =
-                      (double.tryParse(value)! * 7 / 0.15);
-                }
-              },
-              decoration: InputDecoration(labelText: 'Salario Base'),
-            ),
-            SizedBox(height: 12),
-            TextFormField(
-              enabled: false,
-              controller: _loanController,
-              decoration: InputDecoration(labelText: 'Valor del Préstamo'),
-            ),
-            SizedBox(height: 12),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _controller.loanMonths.value = int.tryParse(value) ?? 0;
-              },
-              decoration:
-                  InputDecoration(labelText: 'Número de Meses del Préstamo'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Aquí puedes realizar la simulación del crédito y pasar los datos a la próxima página con GetX
-                _controller.calculateAmortizationTable();
-                Get.to(() => AmortizationTablePage());
-              },
-              child: Text('Simular Crédito'),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                Get.to(CreditSimulationPage());
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.history),
-              onPressed: () {
-                Get.to(SavedTablesPage());
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+        body: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Bank icon
+                  SizedBox(width: 8),
+                  Text(
+                    'Simulador de crédito', // Bank text
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Ingresa los datos para tu crédito según lo que necesites.',
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(height: 32),
+              DropdownButtonFormField<String>(
+                value: _controller.selectedCreditType.value,
+                items: [
+                  'Crédito Vehículo',
+                  'Crédito Vivienda',
+                  'Crédito de Libre Inversión'
+                ]
+                    .map((creditType) => DropdownMenuItem<String>(
+                        value: creditType, child: Text(creditType)))
+                    .toList(),
+                onChanged: (value) {
+                  _controller.selectedCreditType.value = value ?? '';
+                },
+                decoration:
+                    _createInputDecoration('Tipo de crédito', Icons.money),
+              ),
+              SizedBox(height: 12),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  _controller.baseSalary.value = double.tryParse(value) ?? 0.0;
+                  if (value.isEmpty) {
+                    _loanController.text = '0';
+                    _controller.baseSalary.value = 10;
+                  } else {
+                    _loanController.text =
+                        (double.tryParse(value)! * 7 / 0.15).toString();
+                    _controller.loanAmount.value =
+                        (double.tryParse(value)! * 7 / 0.15);
+                  }
+                },
+                decoration: _createInputDecoration('Salario Base', Icons.money),
+              ),
+              SizedBox(height: 12),
+              TextFormField(
+                enabled: false,
+                controller: _loanController,
+                decoration:
+                    _createInputDecoration('Valor del préstamo', Icons.money),
+              ),
+              SizedBox(height: 12),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  _controller.loanMonths.value = int.tryParse(value) ?? 0;
+                },
+                decoration: _createInputDecoration(
+                    'Número de meses', Icons.calendar_today),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _controller.calculateAmortizationTable();
+                  Get.to(() => AmortizationTablePage());
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, // Set the button color to blue
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(8.0), // Add rounded corners
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 16.0), // Increase vertical padding
+                  minimumSize: Size(double.infinity,
+                      48.0), // Make the button occupy all horizontal space
+                ),
+                child: Text(
+                  'Simular',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.white,
+          shape: const CircularNotchedRectangle(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: Icon(Icons.home),
+                onPressed: () {
+                  // Home button onPressed
+                  Get.to(CreditSimulationPage());
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.history),
+                onPressed: () {
+                  // History button onPressed
+                  Get.to(SavedTablesPage());
+                },
+              ),
+            ],
+          ),
+        ));
   }
 }
