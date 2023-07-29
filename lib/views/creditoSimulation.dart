@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'showtables.dart';
@@ -9,6 +11,33 @@ class CreditSimulationPage extends StatelessWidget {
   final CreditSimulationController _controller =
       Get.put(CreditSimulationController());
   final TextEditingController _loanController = TextEditingController();
+
+  Future<String> _getUsernameFromFirestore() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+    String userId =
+        user!.uid; // Replace this with the actual user ID or user identifier
+    String username = '';
+
+    try {
+      // Replace 'users' with the actual collection name where user data is stored
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      print("dsfdsfd");
+      // Assuming your user data document in Firestore has a 'username' field
+      if (snapshot.exists) {
+        username = snapshot.data()!['name'] ?? '';
+      }
+    } catch (e) {
+      // Handle any errors that might occur during the process
+      print('Error fetching username: $e');
+    }
+
+    return username;
+  }
 
   InputDecoration _createInputDecoration(String labelText, IconData icon) {
     return InputDecoration(
@@ -39,18 +68,46 @@ class CreditSimulationPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Bank icon
-                  SizedBox(width: 8),
-                  Text(
-                    'Simulador de crédito', // Bank text
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
+                  Column(
+                    children: [
+                      // Bank icon
+                      SizedBox(width: 8),
+                      Text(
+                        'Simulador de crédito', // Bank text
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      FutureBuilder<String>(
+                        future: _getUsernameFromFirestore(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            // While waiting for the data to load, you can show a loading indicator
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            // If there's an error, handle it accordingly
+                            return Text('Error loading username');
+                          } else {
+                            String username = snapshot.data ?? '';
+                            return Text(
+                              'Hola $username',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
                   ),
+                  // Display "Hola" and the username from Firestore
                 ],
               ),
               SizedBox(height: 16),
